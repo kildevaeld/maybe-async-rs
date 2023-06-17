@@ -366,7 +366,7 @@ pub fn maybe_async(args: TokenStream, input: TokenStream) -> TokenStream {
 
     let mut item = parse_macro_input!(input as Item);
 
-    let token = if cfg!(feature = "is_sync") {
+    let token = if cfg!(not(feature = "is_async")) {
         convert_sync(&mut item)
     } else {
         convert_async(&mut item, send)
@@ -404,7 +404,7 @@ pub fn must_be_sync(_args: TokenStream, input: TokenStream) -> TokenStream {
 #[proc_macro_attribute]
 pub fn sync_impl(_args: TokenStream, input: TokenStream) -> TokenStream {
     let input = TokenStream2::from(input);
-    let token = if cfg!(feature = "is_sync") {
+    let token = if cfg!(not(feature = "is_async")) {
         quote!(#input)
     } else {
         quote!()
@@ -428,7 +428,7 @@ pub fn async_impl(args: TokenStream, _input: TokenStream) -> TokenStream {
         }
     };
 
-    let token = if cfg!(feature = "is_sync") {
+    let token = if cfg!(not(feature = "is_async")) {
         quote!()
     } else {
         let mut item = parse_macro_input!(_input as Item);
