@@ -60,7 +60,7 @@ impl Trait for Struct {
     }
 }
 
-#[cfg(feature = "is_sync")]
+#[cfg(not(feature = "is_async"))]
 fn main() -> std::result::Result<(), ()> {
     let s = Struct;
     s.declare_async();
@@ -70,7 +70,7 @@ fn main() -> std::result::Result<(), ()> {
     Ok(())
 }
 
-#[cfg(not(feature = "is_sync"))]
+#[cfg(feature = "is_async")]
 #[async_std::main]
 async fn main() {
     let s = Struct;
